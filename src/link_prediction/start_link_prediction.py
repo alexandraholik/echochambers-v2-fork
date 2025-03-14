@@ -2,19 +2,19 @@ import os
 import random
 import networkx as nx
 
-from link_prediction.state_of_art_alg import get_edges_to_add
+from src.link_prediction.state_of_art_alg import get_edges_to_add
 from networkx.algorithms.link_prediction import resource_allocation_index, preferential_attachment, jaccard_coefficient, adamic_adar_index
-from link_prediction.link_pred_utilities import add_edges, plot_controversy_measure_line, plot_controversy_sentiment_match
-from link_prediction.home_made_link_prediction import get_edges_to_add_degree, get_edges_to_add_bet, add_top_deg_to_normal
-from link_prediction.link_pred_launcher import launch_all_link_prediction
+from src.link_prediction.link_pred_utilities import add_edges, plot_controversy_measure_line, plot_controversy_sentiment_match
+from src.link_prediction.home_made_link_prediction import get_edges_to_add_degree, get_edges_to_add_bet, add_top_deg_to_normal
+from src.link_prediction.link_pred_launcher import launch_all_link_prediction
 
 from networkx.algorithms.shortest_paths.generic import average_shortest_path_length
 import pickle
 
 def start_link_opt():
     garimella()
-    covid()
-    vaccination()
+    # covid()
+    # vaccination()
 
 
 def garimella():
@@ -108,6 +108,7 @@ def vaccination():
         for j in range(len(result)):
             single_target.append(result[j][i])
 
+        single_target.append(1)
         plot_controversy_measure_line(single_target, f'Riduzione controversy per Vaccination data {contr_detect_method[i]} controversy', no_contr_values[i])
 
     # for each link prediction

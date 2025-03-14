@@ -9,7 +9,7 @@ from random import random, randint
 from collections import Counter
 import os
 
-from community.log_writer import log_write_com_result, log_write_graph_info, print_difference
+from src.community.log_writer import log_write_com_result, log_write_graph_info, print_difference
 
 
 def create_multi_graph(G):

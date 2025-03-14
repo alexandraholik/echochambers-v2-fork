@@ -1,14 +1,14 @@
 import os
 
 import random
-from controversy_detection.random_walks import random_walks, random_walks_centrality
-from controversy_detection.change_side_controversy import change_side_controversy
-from controversy_detection.GMCK import start_GMCK
-from controversy_detection.EC import start_EC
+from src.controversy_detection.random_walks import random_walks, random_walks_centrality
+from src.controversy_detection.change_side_controversy import change_side_controversy
+from src.controversy_detection.GMCK import start_GMCK
+from src.controversy_detection.EC import start_EC
 import logging
 from datetime import datetime
 import networkx as nx
-from controversy_detection.log_writer import log_write_start_end
+from src.controversy_detection.log_writer import log_write_start_end
 from networkx.algorithms.shortest_paths.generic import average_shortest_path_length
 
 
@@ -42,7 +42,8 @@ def garimella_graph():
             logging.info(f'Average shortest path: {shortest_path}')
 
             random_walks(graph, 0.6, shortest_path*2)
-            random_walks_centrality(graph)
+            # Note: Needed to add num steps
+            random_walks_centrality(graph, num_steps=1)
             print()
 
             change_side_controversy(graph, 0.6, shortest_path*2)

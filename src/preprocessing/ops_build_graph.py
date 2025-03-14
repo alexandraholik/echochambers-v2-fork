@@ -1,11 +1,11 @@
-from preprocessing.ops_on_raw_data import check_directory_absence
-from preprocessing.utilities import (get_only_date, get_metadata, 
-                                    clean, manage_and_save, add_edge, 
+from src.preprocessing.ops_on_raw_data import check_directory_absence
+from src.preprocessing.utilities import (get_only_date, get_metadata,
+                                    clean, manage_and_save, add_edge,
                                     create_multi_graph)
 #from preprocessing.ops_sentiment_affin import add_sentiment
-from preprocessing.ops_sentiment_vader import add_sentiment
-from preprocessing.topic_modelling import add_topic
-import networkx as nx 
+from src.preprocessing.ops_sentiment_vader import add_sentiment
+from src.preprocessing.topic_modelling import add_topic
+import networkx as nx
 import pandas as pd
 from tqdm import tqdm
 import os
@@ -14,27 +14,34 @@ import time
 
 def graph_ops():
     garimella_graph()
-    covid_graph()
+    # Note: No covid dataset so we can skip this
+    # covid_graph()
     vax_graph()
     add_sentiment()
     # add_topic()
 
-### GARIMELLA 19 GRAPHS
+# Note: This one takes 'retweet_networks' and makes them into graphs
 def garimella_graph():
     starting_path = os.getcwd()
     path = os.path.join(starting_path, 'data/garimella_data')
+
+    # Note: Only runs if /data/garimella_data/Graph does not exist!
     if check_directory_absence('Graph', path):
         os.mkdir('Graph')
         os.chdir(os.path.join(path, 'retweet_networks'))
 
+        # Note: Loads every file in the directory and then proceeds to build graphs for them
         designed_datasets = os.listdir(os.path.join(path, 'retweet_networks'))
 
         build_garimella_graph(designed_datasets, os.path.join(path, 'Graph'))
+    else:
+        print("Garilella graph preprocessing skipped...")
 
     os.chdir(starting_path)
 
+# Note: This one if fast, just creates some .gml files in /Graph
 def build_garimella_graph(designed_datasets, path):
-    for dataset in designed_datasets: 
+    for dataset in designed_datasets:
         df = pd.read_csv(dataset, header=None)
         G_dg = nx.Graph()
 
@@ -120,19 +127,34 @@ def add_meta(path):
 def vax_graph():
     starting_path = os.getcwd()
     path = os.path.join(starting_path, 'data/vax_no_vax')
+
+    # Note: Same pattern here, if 'Graph' is missing, it will try to generate it
     if check_directory_absence('Graph', path):
         os.mkdir('Graph')
         os.chdir(os.path.join(path, 'final_data'))
         build_vaccination_graph(path)
+    else:
+        print("Vax graph already built, skipping...")
 
     os.chdir(starting_path)
 
+# Note: This takes couple of minutes (cca 5min on M3 Mac)
 def build_vaccination_graph(path):
+    # Reads the data from file that was preprocessed earlier
     df = pd.read_csv(path + '/final_data/' + 'Final_data.csv', lineterminator='\n')
 
     G_dg = nx.DiGraph()
     G_g = nx.Graph()
 
+    # Note: The processed file
+    # 0 - date
+    # 1 - username
+    # 2 - replies_count
+    # 3 - retweets_count
+    # 4 - likes_count
+    # 5 - hashtags
+    # 6 - mentions
+    # 7 - tweet
     for _, row in tqdm(df.iterrows(), desc="Rows processed"):
         mentions = ast.literal_eval(row[3])
         if 'self' in mentions:
@@ -141,7 +163,7 @@ def build_vaccination_graph(path):
             for mention in mentions:
                 G_dg = add_edge(G_dg, row[2], row[7], row[6], row[5], row[4], row[1], mention)
                 G_g = add_edge(G_g, None, None, None, None, None, row[1], mention)
-                
+
     G_dg.name = 'Starter vax Direct Graph'
     G_g.name = 'Starter vax Graph'
 

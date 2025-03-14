@@ -1,4 +1,6 @@
 import os
+import ssl
+
 import nltk
 from afinn import Afinn
 import numpy as np
@@ -27,9 +29,20 @@ def delete_outliers(dataset, field):
     return dataset
 
 def add_sentiment():
+    # Note: For some reason we need this bit of dark magic code here, in order
+    # to download the punkt and stopwords...
+    # ref: https://stackoverflow.com/questions/38916452/nltk-download-ssl-certificate-verify-failed
+    try:
+        _create_unverified_https_context = ssl._create_unverified_context
+    except AttributeError:
+        pass
+    else:
+        ssl._create_default_https_context = _create_unverified_https_context
+
     nltk.download('punkt')
     nltk.download('stopwords')
-    covid()
+    # Note: No covid dataset so skipping...
+    # covid()
     vax()
 
 def get_stopword():
@@ -37,6 +50,9 @@ def get_stopword():
         stop_words = pickle.load(fp)
     return stop_words
 
+# Note: Not sure what was the guy cookin' here, but for the love of the god I hope he had it correct :D
+# Note: Takes couple of minutes again
+# Note2: Okay it takes like a LOT of time, just be patient (probably like 10-15 minutes, but might be because im running it in debug)
 def add_sent_weight(DiGraph, CompGraph, stop_words, name):
     total_tweet = 0
     max_val = 0
@@ -190,6 +206,7 @@ def vax():
     os.chdir(os.path.join(path))
 
     CompGraph = nx.read_gml('Final_Graph_Vax.gml')
+    # Note: Again, this runs only if there is this 'weightWithSentiment' missing...
     if not 'weightWithSentiment' in list(CompGraph.edges(data=True))[0][2]:
         print(nx.info(CompGraph))
         print()

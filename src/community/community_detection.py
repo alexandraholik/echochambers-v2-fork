@@ -3,8 +3,8 @@ from tqdm import tqdm
 from datetime import datetime
 import logging
 
-from community.com_utilities import community_detection, note_difference
-from community.log_writer import log_write_start_end
+from src.community.com_utilities import community_detection, note_difference
+from src.community.log_writer import log_write_start_end
 
 
 def start_community_detection():
@@ -12,9 +12,12 @@ def start_community_detection():
     logging.basicConfig(filename='community_log.log', level=logging.INFO, format='%(message)s')
     today = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     logging.info(f'RUN TIME: {today}')
-    #garimella_graph()
-    covid_graph()
-    #vax_graph()
+
+
+    garimella_graph()
+    # Note: We don't have covid dataset
+    # covid_graph()
+    # vax_graph()
 
 def garimella_graph():
     logging.basicConfig(filename='community_log.log', level=logging.INFO, format='%(message)s')
@@ -63,6 +66,8 @@ def vax_graph():
     path = os.path.join(starting_path, 'data/vax_no_vax/Graph')
     os.chdir(path)             
     log_write_start_end(True, 'VACCINATION GRAPH')
+
+    # Note these take kinda long
     info_no_sent_metis, info_no_sent_fluid = community_detection('Vax', 1, 'weight')
     info_sent_metis, info_sent_fluid = community_detection('Vax', 1, 'sentiment')
     info_topic_metis, info_topic_fluid = community_detection('Vax', 1, 'topic')

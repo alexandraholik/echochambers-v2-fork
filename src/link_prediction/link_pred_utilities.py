@@ -1,3 +1,5 @@
+import os
+
 from tqdm import tqdm
 from controversy_detection.change_side_controversy import change_side_controversy
 from controversy_detection.GMCK import start_GMCK
@@ -129,7 +131,11 @@ def plot_controversy_measure_line(values, title, no_contr_value):
 
     plt.grid(True)
 
-    plt.savefig(f'./Riduzione_Controversy/{title}.png', dpi = 300, quality = 95, format = 'png', pad_inches = 1000)
+    abspath = os.path.abspath(__file__)
+    dname = os.path.dirname(abspath)
+    os.chdir(dname)
+
+    plt.savefig(f'./result_images/{title}.png', dpi = 300, quality = 95, format = 'png', pad_inches = 1000)
 
 def plot_controversy_sentiment_match(no_sent, sent, title, no_contr_value, methodology):
     fig, ax = plt.subplots()

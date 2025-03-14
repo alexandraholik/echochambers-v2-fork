@@ -1,8 +1,8 @@
 import networkx as nx
 from networkx.algorithms.link_prediction import resource_allocation_index, preferential_attachment, jaccard_coefficient, adamic_adar_index
-from link_prediction.home_made_link_prediction import get_edges_to_add_degree, get_edges_to_add_bet, add_top_deg_to_normal
-from link_prediction.state_of_art_alg import get_edges_to_add
-from link_prediction.link_pred_utilities import add_edges, add_sentiment_boost
+from src.link_prediction.home_made_link_prediction import get_edges_to_add_degree, get_edges_to_add_bet, add_top_deg_to_normal
+from src.link_prediction.state_of_art_alg import get_edges_to_add
+from src.link_prediction.link_pred_utilities import add_edges, add_sentiment_boost
 import os
 
 

@@ -106,13 +106,20 @@ def extract_only_en():
 def ops_on_vac():
     refine_data()
 
+# This takes the big vaccination dataset and extracts only useful (to the person) columns out of it
 def refine_data():
     starting_path = os.getcwd()
+    # Note: Even though in the readme name is stated as 'vaccation' vax_no_vax is clearly needed
+    # so renaming the directory is way to go
     path = os.path.join(starting_path, 'data/vax_no_vax')
+
+    # Note: This is being run only once if the 'final_data' is not present, so to regenerate the 'final_data' delete
+    # the directory
     if check_directory_absence('final_data', path):
         os.mkdir('final_data')
         os.chdir(os.path.join(path, 'raw_data'))
-        df = pd.read_csv('./full_data.csv', usecols=['date', 'username', 'replies_count', 'retweets_count',
+        # Note: Wrong file name, the dataset downloaded is called master.csv so renaming it
+        df = pd.read_csv('./master.csv', usecols=['date', 'username', 'replies_count', 'retweets_count',
                                                       'likes_count', 'hashtags', 'mentions', 'tweet'])
         os.chdir(os.path.join(path, 'final_data'))
         df['mentions'].replace('[]', "['self']", inplace=True)
@@ -121,6 +128,8 @@ def refine_data():
 
         print('VACCINATION DATA FINAL SHAPE')
         print(df.shape)
+    else:
+        print("Vaccination data preprocessing skipped, as it already exists...")
 
     os.chdir(starting_path)
 

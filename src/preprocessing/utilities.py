@@ -133,6 +133,7 @@ def add_edge(G, tweet, hashtag, likes, retweets, replies, source, destination):
             G.add_edge(source, destination, weight = 1.0)
     return G
 
+# Note: This also takes a long time
 def manage_and_save(graphs, path):
 
     for graph in graphs: 

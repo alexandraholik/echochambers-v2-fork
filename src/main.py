@@ -9,7 +9,8 @@ from link_prediction.start_link_prediction import start_link_opt
 import sys
 
 def preprocessing_operation():
-    ops_on_corona()
+    # Note: No Covid dataset, so we can skip this for now...
+    # ops_on_corona()
     ops_on_vac()
     graph_ops()
     print("PREPROCESSING DONE")
@@ -25,10 +26,8 @@ def link_prediction():
     start_link_opt()
 
 if __name__ == '__main__':
+    # Note: This function is needed to be run only for the first time
     preprocessing_operation()
     community_detection()
     controversy_detection()
     link_prediction()
-
-
-
