@@ -128,9 +128,6 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# data
-**/src/data
-
 # code snippets
 **/src/Code_snippets.ipynb
 
